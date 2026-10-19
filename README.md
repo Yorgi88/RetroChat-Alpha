@@ -41,6 +41,29 @@ Next is the app.css i just pasted the initial app.css in the beta version to thi
 - this is what redis, the websockets would use to distinguish the users persistently
 - then we wrap up these unique user_ids with a dummy name, comprising of adjective and noun
 
+- these are all tied to the individual browser sessionb btw
+- i do not want any orphan rooms
+- meaning all the real actions occur when the user hits the proceed btn
+- recall that redis generate the room code when the user is in the welcome-retro file
+- i wrote a copy feature to enable the host user to copy the code and share it with the 
+- guest user
+
+- so when the host clicks "proceed", these happen:
+- Generate user ID
+- generate display name
+- store in the session
+- create a room in redis
+- set self as host
+- redirect to rooms/
 - 
 
+- i also addressed idempotency
+- for example, a user can create a room, hit the proceed btn
+- then open another tab, get room code and hit proceed btn again
+- i made it in a way the browser checks session identity before each room creation
+- so if a user session identity still exists in session
+- it won't matter, in the second tab the user still gets the same user id and display name initially allocated
 
+- NO DUPLICATES!
+
+- 
