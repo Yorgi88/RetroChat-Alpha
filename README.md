@@ -32,3 +32,15 @@ and all that with the server side broadcasts : reverb -- explain the windows.Ech
 
 
 Next is the app.css i just pasted the initial app.css in the beta version to this
+- next, add the welcome-retro file and test, set the test route in the web.php file
+
+-- i also pasted created the rooms dir that houses create and join blade files
+- pasted the contents from the beta
+
+- How i handle uniqueness : a unique random user_id is generated for the users
+- this is what redis, the websockets would use to distinguish the users persistently
+- then we wrap up these unique user_ids with a dummy name, comprising of adjective and noun
+
+- 
+
+
