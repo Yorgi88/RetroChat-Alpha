@@ -46,7 +46,22 @@ class IdentityService {
     }
 
     public function hasIdentity(): bool {
-        //
+        return $this->userId() !== null && $this->displayName() !== null;
+    }
+
+
+    private function generateUserId(): string {
+        return 'usr_' . Str::lower(Str::random(8));
+    }
+
+    private function generateDisplayName(): string {
+        $adjectives = config('identity_words.adjectives');
+        $nouns = config('identity_words.nouns');
+
+        $adjective = $adjectives[array_rand($adjectives)];
+        $noun = $nouns[array_rand($nouns)];
+
+        return $adjective . '_' . $noun;
     }
 }
 
