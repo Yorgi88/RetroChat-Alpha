@@ -66,4 +66,20 @@ Next is the app.css i just pasted the initial app.css in the beta version to thi
 
 - NO DUPLICATES!
 
-- 
+- Now, we need a place to handle our generation logic;
+- in the app dir, create a Services dir, this would house two files
+- IdentityService and RoomService
+- also , in the config dir, create a rooms.php file
+
+- also in the config dir , created the identity_words.php file -- this houses the cheeky display names for the users
+
+- i added 50 extra each; now its 100 X 100
+- now back to the app dir; the IdentityService file and the RoomService file
+- lets look at the code and revise
+
+- in the IdentityService code: 
+
+- I started with the ensureSessionIdentity(): method
+- this method checks if the user that wants to create the room already has a session identity -- recall the idempotency stuff?
+- so if the user has no identity, then generate one for the user and store it in the Session
+
