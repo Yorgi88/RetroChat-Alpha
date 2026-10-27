@@ -83,3 +83,19 @@ Next is the app.css i just pasted the initial app.css in the beta version to thi
 - this method checks if the user that wants to create the room already has a session identity -- recall the idempotency stuff?
 - so if the user has no identity, then generate one for the user and store it in the Session
 
+- for now we done with the IdentityService file, we move on to room service
+- this would be the largest file here
+
+- it handles room code generation
+- room creation
+- room joining
+- room leaving
+
+- i have written the barebones for now before we go into the create, join , leave etc
+
+for now, i wrote the helper internal methods
+- like the generateCode method, keysFor, roomExists, randomCode methods
+
+- the randomCode method helps loop 6 times, generating a unique charset which would be the
+- 6 digit room code
+
