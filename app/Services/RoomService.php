@@ -75,6 +75,38 @@ class RoomService {
         return $code;
     }
 
+    public function join(string $code, string $userId, string $displayName): array {
+        if(! $this->roomExists($code)){
+            return ['status' => 'not_found'];
+        }
+
+        $keys = $this->keysFor($code);
+
+        //below is idempotency -- if the user is already in the roster, 
+        // treat as success without re-adding
+        if($this->hasMember($keys['users'], $userId)){
+            return ['status' => 'already_member'];
+        }
+
+        if($this->roomIsFull($code)){
+            return ['status' => 'room_full'];
+        }
+
+        $now = time();
+
+        Redis::pipeline(function ($pipe) use ($keys, $userId, $displayName, $now) {
+            $pipe->zadd($keys['users'], $now, $userId);
+            $pipe->hset($keys['names'], $userId, $displayName);
+        });
+
+        return ['status' => 'ok'];
+    }
+
+    public function hasMember(string $setkey, string $member): bool {
+        $score = Redis::zscore($setkey, $member);
+        return $score !== null && $score !== false;
+    }
+
     public function roomExists(string $code): bool {
         $keys = $this->keysFor($code);
         return (bool) Redis::exists($keys['meta']);

@@ -122,4 +122,10 @@ next, we start actually writing the logic
 
 - did a lil tweak on the time() -> i defined it as a variable called $now and used it
 
-- 
+- Next, is the join() method
+- join can only be possible if:
+- the room exists
+- the room isn't full
+- the user isn't already a member
+
+-- the join code itself is quite clean, take a look at it
