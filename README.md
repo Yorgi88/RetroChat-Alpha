@@ -129,3 +129,20 @@ next, we start actually writing the logic
 - the user isn't already a member
 
 -- the join code itself is quite clean, take a look at it
+
+- Next function is the destroy() method
+- only the host has the power to initiate this action
+
+- this action wipes out all the redis keys
+- onSuccessful destruction ? else: error, the person who initiated it is not a host
+- but a guest
+
+- next is the leave() method
+- host leaves, the room is destroyed
+- guest leaves, only the guest gets ejected, the host still remains
+
+- nothing is done if the room does not exist
+
+- for the leave() method code
+Redis::zrem();  -> removes the guest's username from the set
+Redis::hdel(); -> removes the guest's display name mapping from the set

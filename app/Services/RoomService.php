@@ -102,6 +102,54 @@ class RoomService {
         return ['status' => 'ok'];
     }
 
+    public function destroy(string $code, string $userId): bool {
+        if(! $this->roomExists($code)){
+            return false;
+        }
+
+        if($this->hostId($code) !== $userId){
+            return false;
+        }
+
+        $keys = $this->keysFor($code);
+        Redis::del(
+            $keys['meta'],
+            $keys['users'],
+            $keys['names'],
+        );
+
+        return true;
+    }
+
+    public function leave(string $code, string $userId): void {
+        if(! $this->roomExists($code)){
+            return;
+        }
+
+        // host leaving the room -- this kills the room
+        if($this->hostId($code) === $userId){
+            $this->destroy($code, $userId);
+            return;
+        }
+
+        // guest leaving the room -- remove from roster and name only
+        $keys = $this->keysFor($code);
+        Redis::pipeline(function ($pipe) use ($keys, $userId) {
+            $pipe->zrem($keys['users'], $userId);
+            $pipe->hdel($keys['names'], $userId);
+        });
+    }
+
+    public function hostId(string $code): ?string {
+        if(! $this->roomExists($code)){
+            return null;
+        }
+
+        $keys = $this->keysFor($code);
+        $host = Redis::hget($keys['meta'], 'host_id');
+        return $host !== false ? $host : null;
+    }
+
     public function hasMember(string $setkey, string $member): bool {
         $score = Redis::zscore($setkey, $member);
         return $score !== null && $score !== false;
