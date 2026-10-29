@@ -99,3 +99,27 @@ for now, i wrote the helper internal methods
 - the randomCode method helps loop 6 times, generating a unique charset which would be the
 - 6 digit room code
 
+next, we start actually writing the logic
+- i started with create() method
+- this generates a room code
+- writes the room's redis keys (keysFor method) -- meta , users, names
+- set the host, applies the ttl
+- and lastly, returns the code
+
+-  $pipe->hset($keys['meta'], 'host_id', $userId);
+-- this writes writes the field value pair into a redis hash
+- so 'host_id' => $userId -- i use hset because we write in more than one key
+- like 'expires_at' for exampple
+
+-- have it in mind that meta is just the room's metadata, ->maxUsers, the host, created_at
+ - etc
+
+ -  //2. the users joining the room -- done in chronological order
+            $pipe->zadd($keys['users'], time(), $userId);
+- we can get the host [0] and the guest [1] - this way
+
+- the three line $pipe->expire snippet expires all the keys (meta, users, names) in 44 mins
+
+- did a lil tweak on the time() -> i defined it as a variable called $now and used it
+
+- 
